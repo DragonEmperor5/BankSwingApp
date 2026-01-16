@@ -61,4 +61,44 @@ public class AccountController {
         }
         return false;
     }
+
+// TARIK TUNAI
+public static boolean tarikTunai(double jumlah) {
+    if (jumlah <= 0) return false;
+
+    // Cek saldo
+    double saldoSekarang = getSaldo();
+    if (saldoSekarang < jumlah) {
+        return false; // Saldo tidak cukup
+    }
+
+    try {
+        Connection conn = DatabaseConnection.getConnection();
+
+        // Kurangi Saldo
+        String sqlUpdate = "UPDATE accounts SET saldo = saldo - ? WHERE id_user = ?";
+        PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
+        psUpdate.setDouble(1, jumlah);
+        psUpdate.setInt(2, Session.idUser);
+        int rows = psUpdate.executeUpdate();
+
+        if (rows > 0) {
+            // Catat Transaksi jika update saldo berhasil
+            String sqlInsert = """
+                INSERT INTO transactions (id_account, tipe, jumlah, keterangan)
+                SELECT id_account, 'TARIK', ?, 'Tarik Tunai'
+                FROM accounts WHERE id_user = ?
+            """;
+            PreparedStatement psInsert = conn.prepareStatement(sqlInsert);
+            psInsert.setDouble(1, jumlah);
+            psInsert.setInt(2, Session.idUser);
+            psInsert.executeUpdate();
+            
+            return true;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
 }
