@@ -4,6 +4,7 @@ import src.controller.LoginController;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class LoginForm extends JFrame {
@@ -13,58 +14,119 @@ public class LoginForm extends JFrame {
     private JButton btnLogin;
 
     public LoginForm() {
-        setTitle("Bank App Login");
-        setSize(400, 350); // Ukuran sedikit diperbesar biar lega
+        setTitle("Bank Swing - Secure Login");
+        setSize(850, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new GridBagLayout()); // Pakai Layout center
+        setLayout(new GridLayout(1, 2)); // Bagi 2 layar: Kiri & Kanan
 
-        // Panel utama (semacam "Card" di tengah)
-        JPanel panel = new JPanel();
-        panel.setLayout(null);
-        panel.setPreferredSize(new Dimension(300, 250));
-        // Opsional: Kasih border putih tipis kalau background gelap
-        panel.putClientProperty(FlatClientProperties.STYLE, "arc: 20; background: lighten(@background, 5%)");
-        add(panel);
+        // === BAGIAN KIRI (BRANDING SIDE) ===
+        JPanel leftPanel = new JPanel();
+        leftPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue (Khas Bank)
+        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        
+        // Spacer biar konten turun ke tengah
+        leftPanel.add(Box.createVerticalGlue());
 
-        // JUDUL
-        JLabel lblTitle = new JLabel("Welcome Back", SwingConstants.CENTER);
+        JLabel lblLogo = new JLabel("BANK SWING");
+        lblLogo.setFont(new Font("Segoe UI", Font.BOLD, 32));
+        lblLogo.setForeground(Color.WHITE);
+        lblLogo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftPanel.add(lblLogo);
+
+        JLabel lblSlogan = new JLabel("Trusted. Secure. Professional.");
+        lblSlogan.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblSlogan.setForeground(new Color(255, 255, 255, 150)); // Putih transparan
+        lblSlogan.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftPanel.add(lblSlogan);
+
+        // Spacer bawah
+        leftPanel.add(Box.createVerticalGlue());
+        
+        // Copyright kecil di bawah kiri
+        JLabel lblCopy = new JLabel("© 2026 Bank Swing Corp.   ");
+        lblCopy.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        lblCopy.setForeground(new Color(255, 255, 255, 80));
+        lblCopy.setAlignmentX(Component.CENTER_ALIGNMENT);
+        leftPanel.add(lblCopy);
+        leftPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        add(leftPanel);
+
+        // BAGIAN KANAN (FORM SIDE)
+        JPanel rightPanel = new JPanel();
+        rightPanel.setBackground(Color.WHITE);
+        rightPanel.setLayout(new GridBagLayout()); // Biar form pas di tengah vertikal
+
+        JPanel formContainer = new JPanel();
+        formContainer.setLayout(new BoxLayout(formContainer, BoxLayout.Y_AXIS));
+        formContainer.setBackground(Color.WHITE);
+        formContainer.setPreferredSize(new Dimension(300, 350));
+
+        // Judul Login
+        JLabel lblTitle = new JLabel("Internet Banking");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lblTitle.setBounds(0, 20, 300, 30);
-        panel.add(lblTitle);
+        lblTitle.setForeground(new Color(33, 37, 41));
+        lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(lblTitle);
 
-        JLabel lblSubtitle = new JLabel("Please login to your account", SwingConstants.CENTER);
-        lblSubtitle.putClientProperty(FlatClientProperties.STYLE, "font: -2; foreground: $Label.disabledForeground");
-        lblSubtitle.setBounds(0, 50, 300, 20);
-        panel.add(lblSubtitle);
+        JLabel lblSub = new JLabel("Silakan masuk untuk melanjutkan");
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblSub.setForeground(Color.GRAY);
+        lblSub.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(lblSub);
+        
+        formContainer.add(Box.createRigidArea(new Dimension(0, 30))); // Jarak
 
-        // USERNAME INPUT
+        // Input Username
+        JLabel lblUser = new JLabel("Username ID");
+        lblUser.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblUser.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(lblUser);
+        
+        formContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+
         txtUsername = new JTextField();
-        txtUsername.setBounds(30, 90, 240, 35);
-        txtUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your username");
-        txtUsername.putClientProperty(FlatClientProperties.STYLE, "arc: 10"); // Membulatkan sudut
-        panel.add(txtUsername);
+        txtUsername.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        txtUsername.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Masukkan User ID Anda");
+        txtUsername.putClientProperty(FlatClientProperties.STYLE, "arc: 5; margin: 0,10,0,10"); // Kotak tegas (arc kecil)
+        txtUsername.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(txtUsername);
 
-        // PASSWORD INPUT 
+        formContainer.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Input Password
+        JLabel lblPass = new JLabel("Password");
+        lblPass.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblPass.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(lblPass);
+
+        formContainer.add(Box.createRigidArea(new Dimension(0, 5)));
+
         txtPassword = new JPasswordField();
-        txtPassword.setBounds(30, 140, 240, 35);
-        txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Enter your password");
-        txtPassword.putClientProperty(FlatClientProperties.STYLE, "arc: 10; showRevealButton: true"); // Tombol Show Password (Ikon Mata)
-        panel.add(txtPassword);
+        txtPassword.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        txtPassword.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Masukkan Password Anda");
+        txtPassword.putClientProperty(FlatClientProperties.STYLE, "arc: 5; margin: 0,10,0,10; showRevealButton: true");
+        txtPassword.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(txtPassword);
 
-        // TOMBOL LOGIN (Gradient/Bold)
-        btnLogin = new JButton("Login");
-        btnLogin.setBounds(30, 200, 240, 40);
+        formContainer.add(Box.createRigidArea(new Dimension(0, 25)));
+
+        // Tombol Login
+        btnLogin = new JButton("LOGIN SECURELY");
         btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnLogin.putClientProperty(FlatClientProperties.STYLE, 
-            "arc: 10; " +
-            "background: #007bff; " +
-            "foreground: #ffffff; " +
-            "borderWidth: 0"
-        );
-        panel.add(btnLogin);
-
+        btnLogin.setForeground(Color.WHITE);
+        btnLogin.setBackground(new Color(13, 27, 62)); // Samakan dengan warna kiri
+        btnLogin.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        // Tombol kotak tegas khas enterprise
+        btnLogin.putClientProperty(FlatClientProperties.STYLE, "arc: 5; border: 0; focusWidth: 0");
+        btnLogin.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formContainer.add(btnLogin);
+        
         btnLogin.addActionListener(e -> login());
+
+        rightPanel.add(formContainer);
+        add(rightPanel);
     }
 
     private void login() {
@@ -72,12 +134,10 @@ public class LoginForm extends JFrame {
         String password = new String(txtPassword.getPassword());
 
         if (LoginController.login(username, password)) {
-            // Animasi dikit pas sukses 
-            JOptionPane.showMessageDialog(this, "Login Berhasil!");
             new DashboardForm().setVisible(true);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Ups, Username/Password salah!", "Gagal", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Akses Ditolak: Username/Password Salah", "Security Alert", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
