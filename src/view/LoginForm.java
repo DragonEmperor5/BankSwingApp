@@ -20,9 +20,9 @@ public class LoginForm extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(1, 2)); // Bagi 2 layar: Kiri & Kanan
 
-        // === BAGIAN KIRI (BRANDING SIDE) ===
+        // BAGIAN KIRI (BRANDING SIDE)
         JPanel leftPanel = new JPanel();
-        leftPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue (Khas Bank)
+        leftPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         
         // Spacer biar konten turun ke tengah
@@ -113,7 +113,7 @@ public class LoginForm extends JFrame {
         formContainer.add(Box.createRigidArea(new Dimension(0, 25)));
 
         // Tombol Login
-        btnLogin = new JButton("LOGIN SECURELY");
+        btnLogin = new JButton("LOGIN");
         btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnLogin.setForeground(Color.WHITE);
         btnLogin.setBackground(new Color(13, 27, 62)); // Samakan dengan warna kiri
