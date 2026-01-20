@@ -1,8 +1,10 @@
 package src.view;
 
 import src.controller.TransferController;
+import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class TransferForm extends JFrame {
 
@@ -10,32 +12,80 @@ public class TransferForm extends JFrame {
     private JTextField txtJumlah;
 
     public TransferForm() {
-        setTitle("Transfer Antar Rekening");
-        setSize(350, 250);
+        setTitle("Transfer Dana");
+        setSize(400, 400);
         setLocationRelativeTo(null);
-        setLayout(null);
+        // Menggunakan GridBagLayout agar form berada persis di tengah
+        setLayout(new GridBagLayout()); 
+        
+        // Set background Jendela utama jadi Putih bersih
+        getContentPane().setBackground(Color.WHITE);
 
+        // Container Form
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        
+        // Panel ini transparan (menyatu dengan background)
+        panel.setOpaque(false); 
+        panel.setPreferredSize(new Dimension(320, 320));
+
+        // Judul
+        JLabel lblTitle = new JLabel("Transfer Dana");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22)); // Font diperbesar dikit
+        lblTitle.setForeground(new Color(13, 27, 62));
+        lblTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(lblTitle);
+
+        panel.add(Box.createRigidArea(new Dimension(0, 25))); // Jarak
+
+        // Label Rekening
         JLabel lblRek = new JLabel("Rekening Tujuan");
-        lblRek.setBounds(30, 40, 120, 25);
-        add(lblRek);
+        lblRek.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblRek.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(lblRek);
 
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        // Input Rekening
         txtRekening = new JTextField();
-        txtRekening.setBounds(160, 40, 150, 25);
-        add(txtRekening);
+        txtRekening.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        // Style: Arc (lengkungan) tetap ada, tapi border lebih tipis
+        txtRekening.putClientProperty(FlatClientProperties.STYLE, "arc: 10; margin: 0,10,0,10");
+        txtRekening.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(txtRekening);
 
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // Label Jumlah
         JLabel lblJumlah = new JLabel("Jumlah Transfer");
-        lblJumlah.setBounds(30, 80, 120, 25);
-        add(lblJumlah);
+        lblJumlah.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        lblJumlah.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(lblJumlah);
 
+        panel.add(Box.createRigidArea(new Dimension(0, 5)));
+
+        // Input Jumlah
         txtJumlah = new JTextField();
-        txtJumlah.setBounds(160, 80, 150, 25);
-        add(txtJumlah);
+        txtJumlah.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        txtJumlah.putClientProperty(FlatClientProperties.STYLE, "arc: 10; margin: 0,10,0,10");
+        txtJumlah.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(txtJumlah);
 
+        panel.add(Box.createRigidArea(new Dimension(0, 30)));
+
+        // Tombol Transfer
         JButton btnTransfer = new JButton("Transfer");
-        btnTransfer.setBounds(120, 140, 100, 30);
-        add(btnTransfer);
+        btnTransfer.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnTransfer.setMaximumSize(new Dimension(Integer.MAX_VALUE, 45));
+        btnTransfer.putClientProperty(FlatClientProperties.STYLE, 
+            "background: #0D1B3E; foreground: #fff; border: 0; arc: 10; focusWidth: 0"
+        );
+        btnTransfer.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(btnTransfer);
 
         btnTransfer.addActionListener(e -> transfer());
+
+        add(panel);
     }
 
     private void transfer() {
