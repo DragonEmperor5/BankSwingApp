@@ -20,7 +20,7 @@ public class LoginForm extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(1, 2)); // Bagi 2 layar: Kiri & Kanan
 
-        // BAGIAN KIRI (BRANDING SIDE)
+        // Bagian Kiri (BRANDING SIDE)
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -53,7 +53,7 @@ public class LoginForm extends JFrame {
 
         add(leftPanel);
 
-        // BAGIAN KANAN (FORM SIDE)
+        // Bagian Kanan (FORM SIDE)
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setLayout(new GridBagLayout()); // Biar form pas di tengah vertikal

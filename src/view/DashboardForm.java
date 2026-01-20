@@ -16,7 +16,7 @@ public class DashboardForm extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new BorderLayout()); // Layout utama dibagi: Atas, Tengah, Bawah
 
-        // HEADER (Bagian Atas)
+        // Header (Bagian Atas)
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue
         headerPanel.setBorder(new EmptyBorder(15, 20, 15, 20)); // Padding
@@ -36,7 +36,7 @@ public class DashboardForm extends JFrame {
 
         add(headerPanel, BorderLayout.NORTH);
 
-        // MAIN MENU (Grid Tombol)
+        // Main Menu (Grid Tombol)
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridBagLayout()); // Biar menu pas di tengah layar
         centerPanel.setBackground(new Color(240, 242, 245)); // Background abu-abu muda
@@ -45,7 +45,7 @@ public class DashboardForm extends JFrame {
         JPanel menuContainer = new JPanel(new GridLayout(2, 2, 20, 20)); // Gap antar tombol 20px
         menuContainer.setOpaque(false); // Transparan biar ikut background belakang
 
-        // TOMBOL MENU
+        // Tombol Menu
         JButton btnSaldo = createMenuButton("Cek Saldo", "Lihat sisa saldo tabungan");
         btnSaldo.addActionListener(e -> new SaldoForm().setVisible(true));
         menuContainer.add(btnSaldo);
@@ -66,7 +66,7 @@ public class DashboardForm extends JFrame {
         centerPanel.add(menuContainer);
         add(centerPanel, BorderLayout.CENTER);
         
-        // FOOTER
+        // Footer
         JLabel lblCopy = new JLabel("Bank Swing App v1.0", SwingConstants.CENTER);
         lblCopy.setBorder(new EmptyBorder(10,0,10,0));
         lblCopy.setForeground(Color.GRAY);
