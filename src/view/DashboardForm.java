@@ -45,6 +45,15 @@ public class DashboardForm extends JFrame {
         btnSetor.addActionListener(e -> {
             new DepositForm().setVisible(true);
         });
+        //Tombol Transfer
+        JButton btnTransfer = new JButton("Transfer");
+        btnTransfer.setBounds(30, 160, 150, 30);
+        add(btnTransfer);
+
+        btnTransfer.addActionListener(e -> {
+            new TransferForm().setVisible(true);
+        });
+
 
     }
 
