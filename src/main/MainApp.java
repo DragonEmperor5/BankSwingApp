@@ -1,8 +1,8 @@
-package src.main;
+package main;
 
 import com.formdev.flatlaf.FlatDarkLaf; // 1. Import ini wajib ada
 import com.formdev.flatlaf.FlatLightLaf; // (Opsional) kalau mau tema terang
-import src.view.LoginForm;
+import view.LoginForm;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 

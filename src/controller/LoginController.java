@@ -1,7 +1,7 @@
-package src.controller;
+package controller;
 
-import src.config.DatabaseConnection;
-import src.util.Session;
+import config.DatabaseConnection;
+import util.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

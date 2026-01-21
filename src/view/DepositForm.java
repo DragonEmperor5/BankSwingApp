@@ -1,6 +1,6 @@
-package src.view;
+package view;
 
-import src.controller.AccountController;
+import controller.AccountController;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;

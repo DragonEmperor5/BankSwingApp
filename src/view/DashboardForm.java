@@ -1,6 +1,6 @@
-package src.view;
+package view;
 
-import src.util.Session;
+import util.Session;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;

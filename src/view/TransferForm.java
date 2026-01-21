@@ -1,6 +1,6 @@
-package src.view;
+package view;
 
-import src.controller.TransferController;
+import controller.TransferController;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;

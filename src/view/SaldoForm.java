@@ -1,6 +1,6 @@
-package src.view;
+package view;
 
-import src.controller.AccountController;
+import controller.AccountController;
 
 import javax.swing.*;
 import java.text.DecimalFormat;

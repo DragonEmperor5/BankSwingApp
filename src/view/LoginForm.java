@@ -1,6 +1,6 @@
-package src.view;
+package view;
 
-import src.controller.LoginController;
+import controller.LoginController;
 import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
@@ -127,6 +127,16 @@ public class LoginForm extends JFrame {
 
         rightPanel.add(formContainer);
         add(rightPanel);
+
+        JButton btnRegister = new JButton("Register");
+        btnRegister.setBounds(120, 170, 100, 30);
+        add(btnRegister);
+
+        btnRegister.addActionListener(e -> {
+        new RegisterForm().setVisible(true);
+        dispose();
+        });
+
     }
 
     private void login() {
