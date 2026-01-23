@@ -1,8 +1,10 @@
 package view;
 
 import controller.AccountController;
+import com.formdev.flatlaf.FlatClientProperties;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class SetorForm extends JFrame {
 
@@ -10,23 +12,41 @@ public class SetorForm extends JFrame {
 
     public SetorForm() {
         setTitle("Setor Tunai");
-        setSize(300, 200);
+        setSize(350, 200);
         setLocationRelativeTo(null);
-        setLayout(null);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setLayout(new BorderLayout());
+        getContentPane().setBackground(Color.WHITE);
+
+        JPanel panel = new JPanel(); 
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); 
+        panel.setBackground(Color.WHITE); 
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JLabel lbl = new JLabel("Jumlah Setor");
-        lbl.setBounds(30, 40, 100, 25);
-        add(lbl);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 14)); 
+        lbl.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(lbl);
 
         txtJumlah = new JTextField();
-        txtJumlah.setBounds(130, 40, 120, 25);
-        add(txtJumlah);
+        txtJumlah.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Masukkan jumlah setor"); 
+        txtJumlah.putClientProperty(FlatClientProperties.STYLE, "arc: 5; margin: 0,10,0,10"); 
+        txtJumlah.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
+        txtJumlah.setAlignmentX(Component.LEFT_ALIGNMENT); panel.add(txtJumlah);
+
+        panel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         JButton btnSetor = new JButton("Setor");
-        btnSetor.setBounds(90, 90, 100, 30);
-        add(btnSetor);
-
-        btnSetor.addActionListener(e -> setor());
+        btnSetor.setBackground(new Color(13, 27, 62)); 
+        btnSetor.setForeground(Color.WHITE); 
+        btnSetor.setFont(new Font("Segoe UI", Font.BOLD, 14)); 
+        btnSetor.setFocusPainted(false); 
+        btnSetor.setBorder(BorderFactory.createEmptyBorder()); 
+        btnSetor.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40)); 
+        btnSetor.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        btnSetor.putClientProperty("FlatLaf.style", "arc: 8; focusWidth:0; borderWidth:0"); 
+        btnSetor.addActionListener(e -> setor()); panel.add(btnSetor); 
+        add(panel, BorderLayout.CENTER);
     }
 
     private void setor() {
