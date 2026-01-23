@@ -3,7 +3,6 @@
 **Bank Swing Professional** adalah aplikasi simulasi perbankan desktop yang dibangun menggunakan **Java Swing**. Aplikasi ini dirancang dengan arsitektur **MVC (Model-View-Controller)** untuk memisahkan logika bisnis, data, dan antarmuka pengguna, serta menerapkan tampilan modern menggunakan **FlatLaf**.
 
 ![Banner Aplikasi](assets/banner.png)
-*(Opsional: Ganti dengan screenshot halaman utama aplikasi)*
 
 ---
 
@@ -25,7 +24,7 @@
 * **Styling:** FlatLaf Library
 * **Database:** MySQL (via Laragon/XAMPP)
 * **Koneksi:** JDBC (Java Database Connectivity)
-* **IDE:** VS Code / NetBeans / IntelliJ IDEA
+* **IDE:** VS Code
 
 ---
 
@@ -36,23 +35,24 @@ Berikut adalah simulasi penggunaan aplikasi:
 ### 1. Registrasi & Login
 Pengguna mendaftarkan akun baru, mendapatkan nomor rekening otomatis, lalu masuk ke dashboard.
 
-![Demo Register & Login](assets/demo-register.gif)
-*(Ganti dengan path file GIF kamu)*
+![Demo Register & Login](assets/register.gif)
+![Demo Register & Login](assets/login.gif)
+
 
 ### 2. Dashboard & Cek Saldo
 Tampilan utama yang menampilkan informasi nasabah dan menu transaksi.
 
-![Demo Dashboard](assets/demo-dashboard.gif)
+![Demo Dashboard](assets/cekSaldo.gif)
 
 ### 3. Setor & Tarik Tunai
 Simulasi menabung (menambah saldo) dan mengambil uang (mengurangi saldo).
 
-![Demo Transaksi](assets/demo-transaksi.gif)
+![Demo Transaksi](assets/setorTunaiTarikTunai.gif)
 
 ### 4. Transfer & Mutasi (History)
 Mengirim uang ke rekening lain dan melihat riwayat transaksi di tabel mutasi.
 
-![Demo Transfer History](assets/demo-transfer.gif)
+![Demo Transfer History](assets/transferMutasi.gif)
 
 ---
 
@@ -87,4 +87,55 @@ Mengirim uang ke rekening lain dan melihat riwayat transaksi di tabel mutasi.
 
 ---
 
-## 📂 Struktur Folder (MVC)
+## Struktur Folder (MVC)
+```text
+Bank-Swing-App/
+│
+├── .vscode/                    # (Opsional) Konfigurasi VS Code
+│   └── settings.json
+│
+├── lib/                        # Folder Library Eksternal
+│   ├── flatlaf-3.x.jar         # Untuk tampilan UI Modern
+│   └── mysql-connector-j.jar   # Driver Database MySQL
+│
+├── src/                        # Folder Kode Sumber (Source Code)
+│   ├── config/                 # Konfigurasi Database
+│   │   └── DatabaseConnection.java
+│   │
+│   ├── controller/             # Logika Bisnis (Otak Aplikasi)
+│   │   ├── AccountController.java
+│   │   ├── LoginController.java
+│   │   ├── RegisterController.java
+│   │   ├── TransactionController.java
+│   │   └── TransferController.java
+│   │
+│   ├── model/                  # Representasi Data (Wadah Data)
+│   │   ├── Account.java
+│   │   ├── Transaction.java
+│   │   └── User.java
+│   │
+│   ├── util/                   # Utilitas / Helper
+│   │   └── Session.java        # Menyimpan data user yang sedang login
+│   │
+│   ├── view/                   # Tampilan Antarmuka (GUI)
+│   │   ├── DashboardForm.java
+│   │   ├── HistoryForm.java
+│   │   ├── LoginForm.java
+│   │   ├── RegisterForm.java
+│   │   ├── SaldoForm.java
+│   │   ├── SetorForm.java
+│   │   ├── TransferForm.java
+│   │   └── WithdrawForm.java
+│   │
+│   └── main/                   # Titik Awal Aplikasi (Entry Point)
+│       └── MainApp.java
+│
+├── assets/                     # Aset Gambar/GIF untuk Dokumentasi
+│   ├── demo-register.gif
+│   ├── demo-dashboard.gif
+│   └── demo-transaksi.gif
+│
+├── bak_terbaru_db.sql          # File Database SQL untuk di-import
+├── README.md                   # Dokumentasi Proyek
+└── LICENSE                     # (Opsional) Lisensi Open Source
+```
