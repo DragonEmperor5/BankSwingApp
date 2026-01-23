@@ -20,7 +20,7 @@ public class LoginForm extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(new GridLayout(1, 2)); // Bagi 2 layar: Kiri & Kanan
 
-        // Bagian Kiri (BRANDING SIDE)
+        // Bagian Kiri
         JPanel leftPanel = new JPanel();
         leftPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
@@ -53,7 +53,7 @@ public class LoginForm extends JFrame {
 
         add(leftPanel);
 
-        // Bagian Kanan (FORM SIDE)
+        // Bagian Kanan
         JPanel rightPanel = new JPanel();
         rightPanel.setBackground(Color.WHITE);
         rightPanel.setLayout(new GridBagLayout()); // Biar form pas di tengah vertikal
@@ -128,15 +128,29 @@ public class LoginForm extends JFrame {
         rightPanel.add(formContainer);
         add(rightPanel);
 
-        JButton btnRegister = new JButton("Register");
-        btnRegister.setBounds(120, 170, 100, 30);
-        add(btnRegister);
+        // Tombol Daftar Akun
+        JButton btnRegisterLink = new JButton("Belum punya akun? Daftar disini");
+        btnRegisterLink.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        btnRegisterLink.setForeground(new Color(13, 27, 62));
+        btnRegisterLink.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btnRegisterLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btnRegister.addActionListener(e -> {
-        new RegisterForm().setVisible(true);
-        dispose();
+        // Bikin tombol transparan agar terlihat seperti Text Link
+        btnRegisterLink.setContentAreaFilled(false);
+        btnRegisterLink.setBorderPainted(false);
+        btnRegisterLink.setFocusPainted(false);
+
+        // Aksi saat diklik: Buka RegisterForm
+        btnRegisterLink.addActionListener(e -> {
+            new RegisterForm().setVisible(true); 
+            dispose(); // Tutup Login Form
         });
+        
+        // Masukkan tombol ke container
+        formContainer.add(btnRegisterLink);
 
+        rightPanel.add(formContainer);
+        add(rightPanel);
     }
 
     private void login() {
