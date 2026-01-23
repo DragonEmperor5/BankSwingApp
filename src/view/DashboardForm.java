@@ -21,8 +21,12 @@ public class DashboardForm extends JFrame {
         headerPanel.setBackground(new Color(13, 27, 62)); // Warna Navy Blue
         headerPanel.setBorder(new EmptyBorder(15, 20, 15, 20)); // Padding
 
-        // Teks Sapaan
-        JLabel lblWelcome = new JLabel("Halo, " + Session.namaLengkap);
+        //Ambil Data Rekening dari Model ---
+        model.Account akun = controller.AccountController.getAccountDetail();
+        String noRek = (akun != null) ? akun.getNoRekening() : "-";
+
+        // Teks Sapaan (Pakai HTML biar bisa 2 baris: Nama & No Rek)
+        JLabel lblWelcome = new JLabel("<html>Halo, " + Session.namaLengkap + "<br><span style='font-size:12px; font-weight:normal'>No. Rek: " + noRek + "</span></html>");
         lblWelcome.setFont(new Font("Segoe UI", Font.BOLD, 18));
         lblWelcome.setForeground(Color.WHITE);
         headerPanel.add(lblWelcome, BorderLayout.WEST);

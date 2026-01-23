@@ -1,104 +1,77 @@
 package controller;
 
 import config.DatabaseConnection;
+import model.Account; // Import Model Account
 import util.Session;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class AccountController {
 
-    // ambil saldo
-    public static double getSaldo() {
-        double saldo = 0;
+    // Ambil Data Account
+    public static Account getAccountDetail() {
+        Account acc = null;
         try {
             Connection conn = DatabaseConnection.getConnection();
-            String sql = "SELECT saldo FROM accounts WHERE id_user=?";
+            String sql = "SELECT * FROM accounts WHERE id_user = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1, Session.idUser);
-            var rs = ps.executeQuery();
-            if (rs.next()) saldo = rs.getDouble("saldo");
+            ps.setInt(1, Session.idUser); // Ambil berdasarkan user yg login
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                acc = new Account();
+                acc.setIdAccount(rs.getInt("id_account"));
+                acc.setIdUser(rs.getInt("id_user"));
+                acc.setNoRekening(rs.getString("no_rekening"));
+                acc.setSaldo(rs.getDouble("saldo"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return saldo;
+        return acc;
     }
 
-    // SETOR TUNAI
-    public static boolean setorTunai(double jumlah) {
-        if (jumlah <= 0) return false;
+    // Method getSaldo
+    public static double getSaldo() {
+        Account acc = getAccountDetail();
+        return (acc != null) ? acc.getSaldo() : 0;
+    }
 
+    // Setor Tunai
+    public static boolean setorTunai(double jumlah) {
         try {
             Connection conn = DatabaseConnection.getConnection();
-
-            // update saldo
-            String sqlUpdate = """
-                UPDATE accounts
-                SET saldo = saldo + ?
-                WHERE id_user = ?
-            """;
-            PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
-            psUpdate.setDouble(1, jumlah);
-            psUpdate.setInt(2, Session.idUser);
-            psUpdate.executeUpdate();
-
-            // catat transaksi
-            String sqlInsert = """
-                INSERT INTO transactions (id_account, tipe, jumlah, keterangan)
-                SELECT id_account, 'SETOR', ?, 'Setor Tunai'
-                FROM accounts
-                WHERE id_user = ?
-            """;
-            PreparedStatement psInsert = conn.prepareStatement(sqlInsert);
-            psInsert.setDouble(1, jumlah);
-            psInsert.setInt(2, Session.idUser);
-            psInsert.executeUpdate();
-
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            PreparedStatement ps = conn.prepareStatement("UPDATE accounts SET saldo = saldo + ? WHERE id_user = ?");
+            ps.setDouble(1, jumlah);
+            ps.setInt(2, Session.idUser);
+            
+            if (ps.executeUpdate() > 0) {
+                Account acc = getAccountDetail();
+                TransactionController.addTransaction(acc.getIdAccount(), "SETOR", jumlah, "Setor Tunai");
+                return true;
+            }
+        } catch (Exception e) { e.printStackTrace(); }
         return false;
     }
 
-// TARIK TUNAI
-public static boolean tarikTunai(double jumlah) {
-    if (jumlah <= 0) return false;
+    // Tarik Tunai
+    public static boolean tarikTunai(double jumlah) {
+        try {
+            Account acc = getAccountDetail();
+            if (acc == null || acc.getSaldo() < jumlah) return false;
 
-    // Cek saldo
-    double saldoSekarang = getSaldo();
-    if (saldoSekarang < jumlah) {
-        return false; // Saldo tidak cukup
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement("UPDATE accounts SET saldo = saldo - ? WHERE id_user = ?");
+            ps.setDouble(1, jumlah);
+            ps.setInt(2, Session.idUser);
+
+            if (ps.executeUpdate() > 0) {
+                TransactionController.addTransaction(acc.getIdAccount(), "TARIK", jumlah, "Tarik Tunai");
+                return true;
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return false;
     }
-
-    try {
-        Connection conn = DatabaseConnection.getConnection();
-
-        // Kurangi Saldo
-        String sqlUpdate = "UPDATE accounts SET saldo = saldo - ? WHERE id_user = ?";
-        PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
-        psUpdate.setDouble(1, jumlah);
-        psUpdate.setInt(2, Session.idUser);
-        int rows = psUpdate.executeUpdate();
-
-        if (rows > 0) {
-            // Catat Transaksi jika update saldo berhasil
-            String sqlInsert = """
-                INSERT INTO transactions (id_account, tipe, jumlah, keterangan)
-                SELECT id_account, 'TARIK', ?, 'Tarik Tunai'
-                FROM accounts WHERE id_user = ?
-            """;
-            PreparedStatement psInsert = conn.prepareStatement(sqlInsert);
-            psInsert.setDouble(1, jumlah);
-            psInsert.setInt(2, Session.idUser);
-            psInsert.executeUpdate();
-            
-            return true;
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return false;
-}
 }

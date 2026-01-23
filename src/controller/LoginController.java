@@ -1,7 +1,7 @@
 package controller;
 
 import config.DatabaseConnection;
-import util.Session;
+import model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,10 +9,14 @@ import java.sql.ResultSet;
 
 public class LoginController {
 
-    public static boolean login(String username, String password) {
+    // Return type berubah dari 'boolean' menjadi 'User'
+    public static User login(String username, String password) {
+        User user = null;
+
         try {
             Connection conn = DatabaseConnection.getConnection();
-            String sql = "SELECT * FROM users WHERE username=? AND password=?";
+            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
+            
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
@@ -20,14 +24,18 @@ public class LoginController {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                Session.idUser = rs.getInt("id_user");
-                Session.username = rs.getString("username");
-                Session.namaLengkap = rs.getString("nama_lengkap");
-                return true;
+                // Bungkus data database ke dalam Object Model User
+                user = new User();
+                user.setIdUser(rs.getInt("id_user"));
+                user.setUsername(rs.getString("username"));
+                user.setNamaLengkap(rs.getString("nama_lengkap"));
+                user.setEmail(rs.getString("email"));
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return false;
+
+        return user;
     }
 }
