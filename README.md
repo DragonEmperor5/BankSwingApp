@@ -131,11 +131,40 @@ Bank-Swing-App/
 │       └── MainApp.java
 │
 ├── assets/                     # Aset Gambar/GIF untuk Dokumentasi
-│   ├── demo-register.gif
-│   ├── demo-dashboard.gif
-│   └── demo-transaksi.gif
+│   ├── register.gif
+│   ├── login.gif
+│   ├── cekSaldo.gif
+│   ├── setorTunaiTarikTunai.gif
+│   ├── transferMutasi.gif
+│   └── banner.png
 │
 ├── bak_terbaru_db.sql          # File Database SQL untuk di-import
 ├── README.md                   # Dokumentasi Proyek
 └── LICENSE                     # (Opsional) Lisensi Open Source
 ```
+---
+
+## Dibuat Oleh
+```text
+Nama    : I Putu Angga Widhyadana Putra (240030309)
+Username: KillyNourin
+
+Nama    : I Gede Wiryaartha Adi Karsa (240030239)
+Username: DragonEmperor5
+
+Nama    : Komang Restu Tri Wardana (240030349)
+Username: KomangRestuTriWardana
+```
+
+<a href="https://github.com/KillyNourin">
+  <img src="https://github.com/KillyNourin.png" width="60" style="border-radius: 50%;" alt="Angga">
+</a>
+
+<a href="https://github.com/DragonEmperor5">
+  <img src="https://github.com/DragonEmperor5.png" width="60" style="border-radius: 50%;" alt="De Adi">
+</a>
+
+<a href="https://github.com/KomangRestuTriWardana">
+  <img src="https://github.com/KomangRestuTriWardana.png" width="60" style="border-radius: 50%;" alt="Restu">
+</a>
+
