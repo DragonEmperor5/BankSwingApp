@@ -10,21 +10,16 @@ import java.sql.ResultSet;
 public class TransferController {
 
     public static boolean transfer(String rekeningTujuan, double jumlah) {
-
         if (jumlah <= 0) return false;
 
         Connection conn = null;
 
         try {
             conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false); // TRANSACTION START
+            conn.setAutoCommit(false); 
 
-            // 1. Ambil rekening pengirim
-            String sqlSender = """
-                SELECT id_account, no_rekening, saldo
-                FROM accounts
-                WHERE id_user = ?
-            """;
+            // Cek Pengirim
+            String sqlSender = "SELECT id_account, no_rekening, saldo FROM accounts WHERE id_user = ?";
             PreparedStatement psSender = conn.prepareStatement(sqlSender);
             psSender.setInt(1, Session.idUser);
             ResultSet rsSender = psSender.executeQuery();
@@ -37,12 +32,10 @@ public class TransferController {
 
             if (saldoPengirim < jumlah) return false;
 
-            // 2. Ambil rekening penerima
-            String sqlReceiver = """
-                SELECT id_account
-                FROM accounts
-                WHERE no_rekening = ?
-            """;
+            // Cek Penerima
+            if (rekeningPengirim.equals(rekeningTujuan)) return false;
+
+            String sqlReceiver = "SELECT id_account FROM accounts WHERE no_rekening = ?";
             PreparedStatement psReceiver = conn.prepareStatement(sqlReceiver);
             psReceiver.setString(1, rekeningTujuan);
             ResultSet rsReceiver = psReceiver.executeQuery();
@@ -51,56 +44,49 @@ public class TransferController {
 
             int receiverId = rsReceiver.getInt("id_account");
 
-            // 3. Kurangi saldo pengirim
-            PreparedStatement psKurang = conn.prepareStatement(
-                    "UPDATE accounts SET saldo = saldo - ? WHERE id_account = ?");
+            // Update Saldo
+            PreparedStatement psKurang = conn.prepareStatement("UPDATE accounts SET saldo = saldo - ? WHERE id_account = ?");
             psKurang.setDouble(1, jumlah);
             psKurang.setInt(2, senderId);
             psKurang.executeUpdate();
 
-            // 4. Tambah saldo penerima
-            PreparedStatement psTambah = conn.prepareStatement(
-                    "UPDATE accounts SET saldo = saldo + ? WHERE id_account = ?");
+            PreparedStatement psTambah = conn.prepareStatement("UPDATE accounts SET saldo = saldo + ? WHERE id_account = ?");
             psTambah.setDouble(1, jumlah);
             psTambah.setInt(2, receiverId);
             psTambah.executeUpdate();
 
-            // 5. Catat transaksi keluar
+            // Catat History (Pake NOW() untuk tanggal)
             PreparedStatement psOut = conn.prepareStatement(
-                    "INSERT INTO transactions (id_account, tipe, jumlah, keterangan) VALUES (?, 'TRANSFER_KELUAR', ?, ?)");
+                "INSERT INTO transactions (id_account, tipe, jumlah, keterangan, tanggal) VALUES (?, 'TRANSFER', ?, ?, NOW())");
             psOut.setInt(1, senderId);
             psOut.setDouble(2, jumlah);
             psOut.setString(3, "Transfer ke " + rekeningTujuan);
             psOut.executeUpdate();
 
-            // 6. Catat transaksi masuk
             PreparedStatement psIn = conn.prepareStatement(
-                    "INSERT INTO transactions (id_account, tipe, jumlah, keterangan) VALUES (?, 'TRANSFER_MASUK', ?, ?)");
+                "INSERT INTO transactions (id_account, tipe, jumlah, keterangan, tanggal) VALUES (?, 'TRANSFER', ?, ?, NOW())");
             psIn.setInt(1, receiverId);
             psIn.setDouble(2, jumlah);
-            psIn.setString(3, "Transfer dari " + rekeningPengirim);
+            psIn.setString(3, "Terima dari " + rekeningPengirim);
             psIn.executeUpdate();
 
-            // 7. Catat tabel transfer
-            PreparedStatement psTransfer = conn.prepareStatement(
-                    "INSERT INTO transfers (rekening_pengirim, rekening_penerima, jumlah) VALUES (?, ?, ?)");
-            psTransfer.setString(1, rekeningPengirim);
-            psTransfer.setString(2, rekeningTujuan);
-            psTransfer.setDouble(3, jumlah);
-            psTransfer.executeUpdate();
+            // Catat Tabel Transfer (Optional, pake try-catch biar aman kalo tabel gak ada)
+            try {
+                PreparedStatement psTransfer = conn.prepareStatement(
+                    "INSERT INTO transfers (rekening_pengirim, rekening_penerima, jumlah, tanggal) VALUES (?, ?, ?, NOW())");
+                psTransfer.setString(1, rekeningPengirim);
+                psTransfer.setString(2, rekeningTujuan);
+                psTransfer.setDouble(3, jumlah);
+                psTransfer.executeUpdate();
+            } catch (Exception e) { /* Abaikan jika tabel transfers tidak ada */ }
 
-            conn.commit(); // TRANSACTION SUCCESS
+            conn.commit();
             return true;
 
         } catch (Exception e) {
-            try {
-                if (conn != null) conn.rollback();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
             e.printStackTrace();
+            try { if (conn != null) conn.rollback(); } catch (Exception ex) {}
         }
-
         return false;
     }
 }

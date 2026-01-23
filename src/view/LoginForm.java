@@ -153,15 +153,26 @@ public class LoginForm extends JFrame {
         add(rightPanel);
     }
 
-    private void login() {
+private void login() {
         String username = txtUsername.getText();
         String password = new String(txtPassword.getPassword());
 
-        if (LoginController.login(username, password)) {
+        // Panggil Controller
+        model.User user = LoginController.login(username, password);
+
+        if (user != null) {
+            // Jika user ditemukan, simpan ke Session
+            util.Session.idUser = user.getIdUser();
+            util.Session.namaLengkap = user.getNamaLengkap();
+            
+            //Pindah ke Dashboard
             new DashboardForm().setVisible(true);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Akses Ditolak: Username/Password Salah", "Security Alert", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, 
+                "Username atau Password salah!", 
+                "Login Gagal", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 }
